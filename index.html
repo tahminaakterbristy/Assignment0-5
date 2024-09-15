@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.10.1/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Bus Ticket Booking</title>
+  </head>
+  <body>
+    <!-- Ticket Selling Section -->
+    <section class="bg-base-100 pl-36">
+      <h2 class="text-xl font-bold">Select Your Seat</h2>
+      <hr />
+      <div class="my-5 flex">
+        <img src="images/seat-gray.png" />
+        <span id="remaining-seats" class="font-bold">Available</span>
+        <img src="images/seat-green.png" class="pl-80" />
+        <span id="selected-seats" class="font-bold text-green-600"
+          >Selected: None</span
+        >
+      </div>
+      <hr />
+      <div class="grid grid-cols-5 gap-2 mb-4">
+        <!-- Seats Buttons -->
+        <p>A</p>
+        <button class="btn btn-sm seat">A1</button>
+        <button class="btn btn-sm seat">A2</button>
+        <button class="btn btn-sm seat">A3</button>
+        <button class="btn btn-sm seat">A4</button>
+
+        <p>B</p>
+        <button class="btn btn-sm seat">B1</button>
+        <button class="btn btn-sm seat">B2</button>
+        <button class="btn btn-sm seat">B3</button>
+        <button class="btn btn-sm seat">B4</button>
+
+        <p>C</p>
+        <button class="btn btn-sm seat">C1</button>
+        <button class="btn btn-sm seat">C2</button>
+        <button class="btn btn-sm seat">C3</button>
+        <button class="btn btn-sm seat">C4</button>
+
+        <p>D</p>
+        <button class="btn btn-sm seat">D1</button>
+        <button class="btn btn-sm seat">D2</button>
+        <button class="btn btn-sm seat">D3</button>
+        <button class="btn btn-sm seat">D4</button>
+
+        <p>E</p>
+        <button class="btn btn-sm seat">E1</button>
+        <button class="btn btn-sm seat">E2</button>
+        <button class="btn btn-sm seat">E3</button>
+        <button class="btn btn-sm seat">E4</button>
+      </div>
+
+      <!-- Next Button -->
+      <button id="next-button" class="btn w-full mt-5 bg-green-500 text-white" disabled>
+        Next
+      </button>
+    </section>
+
+    <script>
+      const seats = document.querySelectorAll('.seat');
+      const remainingSeatsSpan = document.getElementById('remaining-seats');
+      const selectedSeatsSpan = document.getElementById('selected-seats');
+      const nextButton = document.getElementById('next-button');
+
+      const seatPrice = 550;
+      let remainingSeats = 12;
+      let selectedSeats = [];
+      let totalCost = 0;
+
+      seats.forEach(seat => {
+        seat.addEventListener('click', () => {
+          const seatNumber = seat.textContent;
+
+          if (!selectedSeats.includes(seatNumber)) {
+            selectedSeats.push(seatNumber);
+            seat.classList.add('bg-green-500'); // Highlight selected seat
+            totalCost += seatPrice;
+            remainingSeats--;
+          } else {
+            selectedSeats = selectedSeats.filter(s => s !== seatNumber);
+            seat.classList.remove('bg-green-500');
+            totalCost -= seatPrice;
+            remainingSeats++;
+          }
+
+          remainingSeatsSpan.textContent = `Available: ${remainingSeats}`;
+          selectedSeatsSpan.textContent = `Selected: ${selectedSeats.join(', ')}`;
+
+          nextButton.disabled = selectedSeats.length === 0;
+        });
+      });
+
+      nextButton.addEventListener('click', () => {
+        Swal.fire({
+          title: 'Seats Selected',
+          text: `You have selected seats: ${selectedSeats.join(', ')}\nTotal Cost: ${totalCost} Tk`,
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      });
+    </script>
+  </body>
+</html>
